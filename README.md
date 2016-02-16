@@ -10,9 +10,15 @@ Colocar esta linea en el archivo composer.json del proyecto:
 <pre style="font-family: Courier New;">"kijho-technologies/kijho-mailer": "dev-master"</pre>
 
 
-Asegurarse que la versión del bundle sendio/distribution-bundle sea 4.0 o superior:
+Es necesario tener instalados los siguientes budles:
+
+<pre style="font-family: Courier New;">"symfony/symfony": "2.8.*",</pre>
 
 <pre style="font-family: Courier New;">"sensio/distribution-bundle": "~4.0"</pre>
+
+<pre style="font-family: Courier New;">"doctrine/doctrine-fixtures-bundle": "dev-master"</pre>
+
+<pre style="font-family: Courier New;">"fkr/cssurlrewrite-bundle": "*"</pre>
 
 <h3>AppKernel.php</h3>
 
