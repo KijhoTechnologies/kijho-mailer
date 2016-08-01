@@ -1,5 +1,5 @@
 {
-    "name": "kijho-technologies/kijho-mailer",
+    "name": "kijho/kijho-mailer",
     "license": "proprietary",
     "type": "project",
     "autoload": {
