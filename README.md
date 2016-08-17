@@ -10,13 +10,7 @@ Colocar esta linea en el archivo composer.json del proyecto:
 <pre style="font-family: Courier New;">"kijho-technologies/kijho-mailer": "dev-master"</pre>
 
 
-Es necesario tener instalados los siguientes budles:
-
-<pre style="font-family: Courier New;">"symfony/symfony": "2.8.*",</pre>
-
-<pre style="font-family: Courier New;">"sensio/distribution-bundle": "~4.0"</pre>
-
-<pre style="font-family: Courier New;">"doctrine/doctrine-fixtures-bundle": "dev-master"</pre>
+Es necesario tener instalado:
 
 <pre style="font-family: Courier New;">"fkr/cssurlrewrite-bundle": "*"</pre>
 
@@ -81,7 +75,7 @@ Instanciar las siguientes extensiones de twig en la seccion de servicios:
 <pre>
 services:
     twig.extension.evaluate:
-      class: Twig\Extension\EvaluateExtension
+      class: Kijho\MailerBundle\Twig\Extension\EvaluateExtension
       tags:
           - { name: twig.extension }
 </pre>
