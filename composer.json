@@ -18,7 +18,7 @@
         "doctrine/doctrine-bundle": "~1.4",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
-        "fkr/cssurlrewrite-bundle" : "*",
+        "fkr/cssurlrewrite-bundle" : "*"
     },
     "extra": {
          "branch-alias": {
