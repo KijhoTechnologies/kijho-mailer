@@ -1,6 +1,6 @@
 <?php
 
-namespace Twig\Extension;
+namespace Kijho\MailerBundle\Twig\Extension;
 
 /**
  * A twig extension that will add an "evaluate" filter, for dynamic evaluation.
