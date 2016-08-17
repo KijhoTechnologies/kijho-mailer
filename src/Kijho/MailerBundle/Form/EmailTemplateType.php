@@ -2,6 +2,12 @@
 
 namespace Kijho\MailerBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\LanguageType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,21 +18,11 @@ class EmailTemplateType extends AbstractType {
 
     protected $storageEntity;
     protected $container;
-    protected $translator;
     protected $entityNames;
 
-    public function __construct($container, $entities = array()) {
+    public function __construct($container) {
         $this->container = $container;
         $this->storageEntity = $this->container->getParameter('kijho_mailer.storage')['template'];
-        $this->translator = $this->container->get('translator');
-
-        //incluimos en el formulario las entidades que se identificaron en el proyecto
-        if (!empty($entities)) {
-            $this->entityNames = array();
-            foreach ($entities as $entity) {
-                $this->entityNames[$entity->getName()] = $entity->getShortName();
-            }
-        }
     }
 
     /**
@@ -34,6 +30,15 @@ class EmailTemplateType extends AbstractType {
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
+        $this->translator = $options['translator'];
+
+        //incluimos en el formulario las entidades que se identificaron en el proyecto
+        if (!empty($options['entities'])) {
+            $this->entityNames = array();
+            foreach ($options['entities'] as $entity) {
+                $this->entityNames[$entity->getName()] = $entity->getShortName();
+            }
+        }
 
         $template = new Template();
 
@@ -42,7 +47,7 @@ class EmailTemplateType extends AbstractType {
         $defaultMailer = $this->container->getParameter('swiftmailer.default_mailer');
 
         $builder
-                ->add('layout', 'entity', array(
+                ->add('layout', EntityType::class, array(
                     'class' => $this->container->getParameter('kijho_mailer.storage')['layout'],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('l')
@@ -52,7 +57,7 @@ class EmailTemplateType extends AbstractType {
                     'required' => false,
                     'placeholder' => $this->translator->trans('kijho_mailer.template.no_layout'),
                     'attr' => array('class' => 'form-control')))
-                ->add('group', 'entity', array(
+                ->add('group', EntityType::class, array(
                     'class' => $this->container->getParameter('kijho_mailer.storage')['template_group'],
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('g')
@@ -62,45 +67,45 @@ class EmailTemplateType extends AbstractType {
                     'required' => false,
                     'placeholder' => $this->translator->trans('kijho_mailer.template.no_group'),
                     'attr' => array('class' => 'form-control')))
-                ->add('name', 'text', array('required' => true,
+                ->add('name', TextType::class, array('required' => true,
                     'label' => $this->translator->trans('kijho_mailer.template.name'),
                     'attr' => array('class' => 'form-control')))
-                ->add('slug', 'text', array('required' => true,
+                ->add('slug', TextType::class, array('required' => true,
                     'label' => $this->translator->trans('kijho_mailer.global.slug'),
                     'attr' => array('class' => 'form-control')))
-                ->add('fromName', 'text', array('required' => false,
+                ->add('fromName', TextType::class, array('required' => false,
                     'label' => $this->translator->trans('kijho_mailer.template.from_name'),
                     'attr' => array('class' => 'form-control')))
-                ->add('fromMail', 'email', array('required' => false,
+                ->add('fromMail', EmailType::class, array('required' => false,
                     'label' => $this->translator->trans('kijho_mailer.template.from_mail'),
                     'attr' => array('class' => 'form-control',
                         'placeholder' => $this->translator->trans('kijho_mailer.global.email_example'))))
-                ->add('copyTo', 'email', array('required' => false,
+                ->add('copyTo', EmailType::class, array('required' => false,
                     'label' => $this->translator->trans('kijho_mailer.template.copy_to'),
                     'attr' => array('class' => 'form-control',
                         'placeholder' => $this->translator->trans('kijho_mailer.global.email_example'))))
-                ->add('subject', 'text', array('required' => false,
+                ->add('subject', TextType::class, array('required' => false,
                     'label' => $this->translator->trans('kijho_mailer.template.subject'),
                     'attr' => array('class' => 'form-control')))
-                ->add('contentMessage', 'textarea', array('required' => false,
+                ->add('contentMessage', TextareaType::class, array('required' => false,
                     'label' => $this->translator->trans('kijho_mailer.layout.content'),
                     'attr' => array('class' => 'form-control')))
-                ->add('status', 'choice', array('required' => true,
+                ->add('status', ChoiceType::class, array('required' => true,
                     'choices' => array(Template::STATUS_ENABLED => $this->translator->trans($template->getStatusDescription(Template::STATUS_ENABLED)),
                         Template::STATUS_DISABLED => $this->translator->trans($template->getStatusDescription(Template::STATUS_DISABLED))),
                     'label' => $this->translator->trans('kijho_mailer.template.status'),
                     'attr' => array('class' => 'form-control')))
-                ->add('mailerSettings', 'choice', array('required' => true,
+                ->add('mailerSettings', ChoiceType::class, array('required' => true,
                     'choices' => $mailers,
                     'preferred_choices' => array($defaultMailer),
                     'label' => $this->translator->trans('kijho_mailer.global.smtp'),
                     'attr' => array('class' => 'form-control')))
-                ->add('entityName', 'choice', array('required' => false,
+                ->add('entityName', ChoiceType::class, array('required' => false,
                     'choices' => $this->entityNames,
                     'label' => $this->translator->trans('kijho_mailer.template.select_entity'),
                     'placeholder' => $this->translator->trans('kijho_mailer.global.select'),
                     'attr' => array('class' => 'form-control')))
-                ->add('languageCode', 'language', array('required' => true,
+                ->add('languageCode', LanguageType::class, array('required' => true,
                     'placeholder' => $this->translator->trans('kijho_mailer.global.select'),
                     'label' => $this->translator->trans('kijho_mailer.global.language'),
                     'attr' => array('class' => 'form-control')))
@@ -108,6 +113,9 @@ class EmailTemplateType extends AbstractType {
     }
 
     public function configureOptions(OptionsResolver $resolver) {
+        $resolver->setRequired('translator');
+        $resolver->setRequired('entities');
+
         $resolver->setDefaults(array(
             'data_class' => $this->storageEntity
         ));
@@ -118,6 +126,10 @@ class EmailTemplateType extends AbstractType {
      */
     public function getName() {
         return 'kijho_mailerbundle_template_type';
+    }
+
+    public function getBlockPrefix() {
+        return $this->getName();
     }
 
 }

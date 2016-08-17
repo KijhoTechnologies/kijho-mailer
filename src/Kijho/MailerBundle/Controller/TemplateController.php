@@ -47,7 +47,10 @@ class TemplateController extends Controller {
 
         $entities = $this->getReflectedProjectEntities();
 
-        $form = $this->createForm(new EmailTemplateType($this->container, $entities['instances']), $template);
+        $form = $this->createForm(EmailTemplateType::class, $template, array(
+            'translator' => $this->get('translator'),
+            'entities' => $entities['instances'],
+        ));
 
         return $this->render('KijhoMailerBundle:Template:new.html.twig', array(
                     'template' => $template,
@@ -72,7 +75,10 @@ class TemplateController extends Controller {
         $template = new $templateStorage;
 
         $entities = $this->getReflectedProjectEntities();
-        $form = $this->createForm(new EmailTemplateType($this->container, $entities['instances']), $template);
+        $form = $this->createForm(EmailTemplateType::class, $template, array(
+            'translator' => $this->get('translator'),
+            'entities' => $entities['instances'],
+        ));
 
         $form->handleRequest($request);
 
@@ -109,7 +115,10 @@ class TemplateController extends Controller {
 
         $entities = $this->getReflectedProjectEntities();
 
-        $form = $this->createForm(new EmailTemplateType($this->container, $entities['instances']), $template);
+        $form = $this->createForm(EmailTemplateType::class, $template, array(
+            'translator' => $this->get('translator'),
+            'entities' => $entities['instances'],
+        ));
 
         return $this->render('KijhoMailerBundle:Template:edit.html.twig', array(
                     'template' => $template,
@@ -133,7 +142,10 @@ class TemplateController extends Controller {
         $templateStorage = $this->container->getParameter('kijho_mailer.storage')['template'];
         $template = $em->getRepository($templateStorage)->find($templateId);
         $entities = $this->getReflectedProjectEntities();
-        $form = $this->createForm(new EmailTemplateType($this->container, $entities['instances']), $template);
+        $form = $this->createForm(EmailTemplateType::class, $template, array(
+            'translator' => $this->get('translator'),
+            'entities' => $entities['instances'],
+        ));
 
         $form->handleRequest($request);
 
@@ -253,7 +265,7 @@ class TemplateController extends Controller {
 
     private function getEntityNamespace() {
         //encontramos el namespace del paquete de entidades a partir de uno de los parametros de strorage
-        $entityNamespace = $this->container->getParameter('kijho_mailer.entity_namespace')."\\";
+        $entityNamespace = $this->container->getParameter('kijho_mailer.entity_namespace') . "\\";
         return $entityNamespace;
     }
 

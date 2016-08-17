@@ -38,7 +38,9 @@ class EmailEventController extends Controller {
         $emailEventStorage = $this->container->getParameter('kijho_mailer.storage')['email_event'];
         $emailEvent = new $emailEventStorage;
 
-        $form = $this->createForm(new EmailEventType($this->container), $emailEvent);
+        $form = $this->createForm(EmailEventType::class, $emailEvent, array(
+            'translator' => $this->get('translator')
+        ));
 
         return $this->render('KijhoMailerBundle:EmailEvent:new.html.twig', array(
                     'emailEvent' => $emailEvent,
@@ -60,7 +62,9 @@ class EmailEventController extends Controller {
         $emailEventStorage = $this->container->getParameter('kijho_mailer.storage')['email_event'];
         $emailEvent = new $emailEventStorage;
 
-        $form = $this->createForm(new EmailEventType($this->container), $emailEvent);
+        $form = $this->createForm(EmailEventType::class, $emailEvent, array(
+            'translator' => $this->get('translator')
+        ));
 
         $form->handleRequest($request);
 
@@ -109,7 +113,9 @@ class EmailEventController extends Controller {
 
         $emailEvent = $em->getRepository($emailEventStorage)->find($emailEventId);
 
-        $form = $this->createForm(new EmailEventType($this->container), $emailEvent);
+        $form = $this->createForm(EmailEventType::class, $emailEvent, array(
+            'translator' => $this->get('translator')
+        ));
 
         return $this->render('KijhoMailerBundle:EmailEvent:edit.html.twig', array(
                     'emailEvent' => $emailEvent,
@@ -131,12 +137,14 @@ class EmailEventController extends Controller {
 
         $emailEventStorage = $this->container->getParameter('kijho_mailer.storage')['email_event'];
         $emailEvent = $em->getRepository($emailEventStorage)->find($emailEventId);
-        $form = $this->createForm(new EmailEventType($this->container), $emailEvent);
+        $form = $this->createForm(EmailEventType::class, $emailEvent, array(
+            'translator' => $this->get('translator')
+        ));
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            
+
             $parameters = $request->request->get('kijho_mailerbundle_email_event_type');
             if (isset($parameters['template'])) {
                 $templateStorage = $this->container->getParameter('kijho_mailer.storage')['template'];
@@ -145,7 +153,7 @@ class EmailEventController extends Controller {
                     $emailEvent->setTemplateSlug($template->getSlug());
                 }
             }
-            
+
             $em->persist($emailEvent);
             $em->flush();
 

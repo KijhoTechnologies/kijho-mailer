@@ -39,7 +39,9 @@ class TemplateGroupController extends Controller {
         $templateGroupStorage = $this->container->getParameter('kijho_mailer.storage')['template_group'];
         $templateGroup = new $templateGroupStorage;
 
-        $form = $this->createForm(new EmailTemplateGroupType($this->container), $templateGroup);
+        $form = $this->createForm(EmailTemplateGroupType::class, $templateGroup, array(
+            'translator' => $this->get('translator')
+        ));
 
         return $this->render('KijhoMailerBundle:TemplateGroup:new.html.twig', array(
                     'templateGroup' => $templateGroup,
@@ -60,7 +62,9 @@ class TemplateGroupController extends Controller {
 
         $templateGroupStorage = $this->container->getParameter('kijho_mailer.storage')['template_group'];
         $templateGroup = new $templateGroupStorage;
-        $form = $this->createForm(new EmailTemplateGroupType($this->container), $templateGroup);
+        $form = $this->createForm(EmailTemplateGroupType::class, $templateGroup, array(
+            'translator' => $this->get('translator')
+        ));
 
         $form->handleRequest($request);
 
@@ -68,9 +72,9 @@ class TemplateGroupController extends Controller {
             $templateGroup->setCreationDate(Util::getCurrentDate());
             $em->persist($templateGroup);
             $em->flush();
-            
+
             //Seteamos el slug del grupo
-            $slug = trim(strtolower(str_replace(' ', '_', $templateGroup->getName())))."_".$templateGroup->getId();
+            $slug = trim(strtolower(str_replace(' ', '_', $templateGroup->getName()))) . "_" . $templateGroup->getId();
             $templateGroup->setSlug($slug);
             $em->persist($templateGroup);
             $em->flush();
@@ -100,7 +104,9 @@ class TemplateGroupController extends Controller {
 
         $templateGroup = $em->getRepository($templateGroupStorage)->find($templateGroupId);
 
-        $form = $this->createForm(new EmailTemplateGroupType($this->container), $templateGroup);
+        $form = $this->createForm(EmailTemplateGroupType::class, $templateGroup, array(
+            'translator' => $this->get('translator')
+        ));
 
         return $this->render('KijhoMailerBundle:TemplateGroup:edit.html.twig', array(
                     'templateGroup' => $templateGroup,
@@ -122,7 +128,9 @@ class TemplateGroupController extends Controller {
 
         $templateGroupStorage = $this->container->getParameter('kijho_mailer.storage')['template_group'];
         $templateGroup = $em->getRepository($templateGroupStorage)->find($templateGroupId);
-        $form = $this->createForm(new EmailTemplateGroupType($this->container), $templateGroup);
+        $form = $this->createForm(EmailTemplateGroupType::class, $templateGroup, array(
+            'translator' => $this->get('translator')
+        ));
 
         $form->handleRequest($request);
 

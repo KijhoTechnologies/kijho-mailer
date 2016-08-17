@@ -16,14 +16,13 @@ class SettingsController extends Controller {
      */
     public function editAction() {
 
-        $settingsStorage = $this->container->getParameter('kijho_mailer.storage')['settings'];
-        
         $settings = $this->get('email_manager')->getMailerSettings();
-
-        $form = $this->createForm(new EmailSettingsType($this->container), $settings);
+        $form = $this->createForm(EmailSettingsType::class, $settings, array(
+            'translator' => $this->get('translator')
+        ));
 
         $swiftMailerSettings = $this->get('email_manager')->getSwiftMailerSettings();
-        
+
         return $this->render('KijhoMailerBundle:Settings:edit.html.twig', array(
                     'settings' => $settings,
                     'swiftMailerSettings' => $swiftMailerSettings,
@@ -42,11 +41,11 @@ class SettingsController extends Controller {
     public function updateAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
 
-        $settingsStorage = $this->container->getParameter('kijho_mailer.storage')['settings'];
-
         $settings = $this->get('email_manager')->getMailerSettings();
 
-        $form = $this->createForm(new EmailSettingsType($this->container), $settings);
+        $form = $this->createForm(EmailSettingsType::class, $settings, array(
+            'translator' => $this->get('translator')
+        ));
 
         $form->handleRequest($request);
 
@@ -67,4 +66,5 @@ class SettingsController extends Controller {
                     'menu' => 'settings'
         ));
     }
+
 }

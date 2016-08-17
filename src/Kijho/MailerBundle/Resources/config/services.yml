@@ -1,5 +1,35 @@
 services:
     email_manager:
         class: Kijho\MailerBundle\Services\EmailManager
-        arguments: [@request_stack, @service_container, @doctrine.orm.entity_manager]
+        arguments: ['@request_stack', '@service_container', '@doctrine.orm.entity_manager']
         #scope: request
+    form.email.event.type:
+            class: Kijho\MailerBundle\Form\EmailEventType
+            arguments:
+                - '@service_container'
+            tags:
+                - { name: form.type }
+    form.email.layout.type:
+            class: Kijho\MailerBundle\Form\EmailLayoutType
+            arguments:
+                - '@service_container'
+            tags:
+                - { name: form.type }
+    form.email.settings.type:
+            class: Kijho\MailerBundle\Form\EmailSettingsType
+            arguments:
+                - '@service_container'
+            tags:
+                - { name: form.type }
+    form.email.template.group.type:
+            class: Kijho\MailerBundle\Form\EmailTemplateGroupType
+            arguments:
+                - '@service_container'
+            tags:
+                - { name: form.type }
+    form.email.template.type:
+            class: Kijho\MailerBundle\Form\EmailTemplateType
+            arguments:
+                - '@service_container'
+            tags:
+                - { name: form.type }
