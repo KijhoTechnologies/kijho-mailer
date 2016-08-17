@@ -7,7 +7,7 @@
 
 Colocar esta linea en el archivo composer.json del proyecto:
 
-<pre style="font-family: Courier New;">"kijho-technologies/kijho-mailer": "dev-master"</pre>
+<pre style="font-family: Courier New;">composer require kijho/kijho-mailer dev-master</pre>
 
 
 Es necesario tener instalado:
