@@ -60,15 +60,15 @@ twig:
         email_manager: "@email_manager"
 
 kijho_mailer:
-    entity_directories: ["%kernel.root_dir%/../src/Acme/DemoBundle/Entity/"]
-    entity_namespace: "Acme\DemoBundle\Entity"
+    entity_directories: ['%kernel.root_dir%/../src/Acme/DemoBundle/Entity/']
+    entity_namespace: 'Acme\DemoBundle\Entity'
     storage:
-        layout:         "Kijho\MailerBundle\Entity\EmailLayout"
-        template_group: "Kijho\MailerBundle\Entity\EmailTemplateGroup"
-        template:       "Kijho\MailerBundle\Entity\EmailTemplate"
-        settings:       "Kijho\MailerBundle\Entity\EmailSettings"
-        email:          "Kijho\MailerBundle\Entity\Email"
-        email_event:    "Kijho\MailerBundle\Entity\EmailEvent"
+        layout:         'Kijho\MailerBundle\Entity\EmailLayout'
+        template_group: 'Kijho\MailerBundle\Entity\EmailTemplateGroup'
+        template:       'Kijho\MailerBundle\Entity\EmailTemplate'
+        settings:       'Kijho\MailerBundle\Entity\EmailSettings'
+        email:          'Kijho\MailerBundle\Entity\Email'
+        email_event:    'Kijho\MailerBundle\Entity\EmailEvent'
 </pre>
 
 Instanciar las siguientes extensiones de twig en la seccion de servicios:
