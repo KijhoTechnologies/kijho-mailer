@@ -32,25 +32,21 @@ class EmailSettingsType extends AbstractType {
 
         $settings = new Settings();
 
+        $sendMode = array(Settings::SEND_MODE_INSTANTANEOUS => $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_INSTANTANEOUS)),
+            Settings::SEND_MODE_PERIODIC => $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_PERIODIC)),
+            Settings::SEND_MODE_BY_EMAIL_AMOUNT => $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_BY_EMAIL_AMOUNT)));
+
         if (version_compare($symfonyVersion, $version) == '-1') {
-            $builder->add('sendMode', ChoiceType::class, array('required' => true,
-                'choices' => array(Settings::SEND_MODE_INSTANTANEOUS => $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_INSTANTANEOUS)),
-                    Settings::SEND_MODE_PERIODIC => $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_PERIODIC)),
-                    Settings::SEND_MODE_BY_EMAIL_AMOUNT => $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_BY_EMAIL_AMOUNT)),),
-                'label' => $this->translator->trans('kijho_mailer.setting.send_mode'),
-                'placeholder' => $this->translator->trans('kijho_mailer.global.select'),
-                'attr' => array('class' => 'form-control')));
+            $sendModeArray = $sendMode;
         } else {
-            $builder->add('sendMode', ChoiceType::class, array('required' => true,
-                'choices' => array(
-                    $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_INSTANTANEOUS)) => Settings::SEND_MODE_INSTANTANEOUS,
-                    $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_PERIODIC)) => Settings::SEND_MODE_PERIODIC,
-                    $this->translator->trans($settings->getSendModeDescription(Settings::SEND_MODE_BY_EMAIL_AMOUNT)) => Settings::SEND_MODE_BY_EMAIL_AMOUNT),
-                'label' => $this->translator->trans('kijho_mailer.setting.send_mode'),
-                'placeholder' => $this->translator->trans('kijho_mailer.global.select'),
-                'attr' => array('class' => 'form-control')));
+            $sendModeArray = array_flip($sendMode);
         }
         $builder
+                ->add('sendMode', ChoiceType::class, array('required' => true,
+                    'choices' => $sendModeArray,
+                    'label' => $this->translator->trans('kijho_mailer.setting.send_mode'),
+                    'placeholder' => $this->translator->trans('kijho_mailer.global.select'),
+                    'attr' => array('class' => 'form-control')))
                 ->add('limitEmailAmount', NumberType::class, array('required' => true,
                     'label' => $this->translator->trans('kijho_mailer.setting.limit_email_amount'),
                     'attr' => array('class' => 'form-control only_numbers',

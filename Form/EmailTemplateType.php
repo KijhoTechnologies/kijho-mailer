@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Kijho\MailerBundle\Model\Template;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpKernel\Kernel;
 
 class EmailTemplateType extends AbstractType {
 
@@ -31,18 +32,41 @@ class EmailTemplateType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $this->translator = $options['translator'];
-
+        $version = "3.0.0";
+        $symfonyVersion = Kernel::VERSION;
         //incluimos en el formulario las entidades que se identificaron en el proyecto
         if (!empty($options['entities'])) {
             $this->entityNames = array();
             foreach ($options['entities'] as $entity) {
-                $this->entityNames[$entity->getName()] = $entity->getShortName();
+                /**
+                 * for symfony 2.8 symfonyVersion < version
+                 */
+                if (version_compare($symfonyVersion, $version) == '-1') {
+                    $this->entityNames[$entity->getName()] = $entity->getShortName();
+                } else {
+                    $this->entityNames[$entity->getShortName()] = $entity->getName();
+                }
             }
         }
-
         $template = new Template();
+        $status = array(
+            Template::STATUS_ENABLED => $this->translator->trans($template->getStatusDescription(Template::STATUS_ENABLED)),
+            Template::STATUS_DISABLED => $this->translator->trans($template->getStatusDescription(Template::STATUS_DISABLED))
+        );
+        if (version_compare($symfonyVersion, $version) == '-1') {
+            $statusArray = $status;
+        } else {
+            $statusArray = array_flip($status);
+        }
 
-        $mailers = $this->container->get('email_manager')->getMailers();
+
+
+
+        if (version_compare($symfonyVersion, $version) == '-1') {
+            $mailers = $this->container->get('email_manager')->getMailers();
+        } else {
+            $mailers = $flipped = array_flip($this->container->get('email_manager')->getMailers());
+        }
 
         $defaultMailer = $this->container->getParameter('swiftmailer.default_mailer');
 
@@ -91,8 +115,7 @@ class EmailTemplateType extends AbstractType {
                     'label' => $this->translator->trans('kijho_mailer.layout.content'),
                     'attr' => array('class' => 'form-control')))
                 ->add('status', ChoiceType::class, array('required' => true,
-                    'choices' => array(Template::STATUS_ENABLED => $this->translator->trans($template->getStatusDescription(Template::STATUS_ENABLED)),
-                        Template::STATUS_DISABLED => $this->translator->trans($template->getStatusDescription(Template::STATUS_DISABLED))),
+                    'choices' => $statusArray,
                     'label' => $this->translator->trans('kijho_mailer.template.status'),
                     'attr' => array('class' => 'form-control')))
                 ->add('mailerSettings', ChoiceType::class, array('required' => true,
