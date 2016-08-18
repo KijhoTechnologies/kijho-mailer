@@ -32,7 +32,7 @@ class EmailEventType extends AbstractType {
                     'attr' => array('class' => 'form-control')))
                 ->add('template', EntityType::class, array(
                     'class' => $this->container->getParameter('kijho_mailer.storage')['template'],
-                    'property' => 'slug',
+                    'choice_label' => 'slug',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('t')
                                 ->groupBy('t.slug')
