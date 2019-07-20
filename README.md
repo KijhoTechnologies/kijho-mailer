@@ -73,7 +73,11 @@ kijho_mailer:
 
 Si quiere agregar un plugin que le permita tener control sobre que imagenes usar en el editor tinymce
 <pre style="font-family: Courier New;">
-     external_filemanager_path: 'path to the plugin'
+# Twig Configuration
+twig:
+    globals:
+        ....
+        external_filemanager_path: 'path to the plugin'
 </pre>        
 
 Instanciar las siguientes extensiones de twig en la seccion de servicios:
