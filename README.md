@@ -78,6 +78,8 @@ twig:
     globals:
         ....
         external_filemanager_path: 'path to the plugin'
+        external_plugins: '.js file'
+        
 </pre>        
 
 Instanciar las siguientes extensiones de twig en la seccion de servicios:
