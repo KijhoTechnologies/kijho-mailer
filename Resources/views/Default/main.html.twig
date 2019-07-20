@@ -87,7 +87,8 @@
                         window.parent.$('.refresh-' + frameid).attr("frame-src", url);
                     }
                     
-                    webshims.polyfill();
+                    webshims.polyfill('details mediaelement forms-ext es5 forms canvas');
+                    
                     {% block scripts %}
                     {% endblock %}
                 });
