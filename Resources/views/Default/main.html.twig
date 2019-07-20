@@ -150,10 +150,10 @@
                             '//www.tinymce.com/css/codepen.min.css'
                         ],
                         relative_urls: false,
-                        {% if external_filemanager_path is defined %}
+                        {% if external_filemanager_path is defined and external_plugins is defined  %}
                             external_filemanager_path: "{{ asset(external_filemanager_path) }}",
                             filemanager_title: "Responsive Filemanager",
-                            external_plugins: {"filemanager": "{{ asset(external_filemanager_path~'plugin.min.js') }}"}
+                            external_plugins: {"filemanager": "{{ asset(external_plugins) }}"}
                         {% endif %}
                     });
                     
