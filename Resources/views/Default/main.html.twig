@@ -57,7 +57,7 @@
         </section><!--/#bottom-->
 
 
-        {% block javascripts %}
+        {% block javascripts %}                       
             {% javascripts
             '@KijhoMailerBundle/Resources/public/js/jquery-2.1.4.min.js'
             '@KijhoMailerBundle/Resources/public/js/bootstrap.min.js'
@@ -73,7 +73,8 @@
 
             
             <script type="text/javascript">
-                $(document).ready(function () {
+                $(document).ready(function () {                    
+
                     $(".alert-dismissable button").click(function () {
                         $(this).parent().slideUp();
                     });
@@ -95,6 +96,7 @@
             </script>
             
             <script type="text/javascript">
+                var url = window.location;
                 function tynyMceToElement(element, height) {
                     tinymce.init({
                         selector: element,
@@ -149,8 +151,10 @@
                         content_css: [
                             '//fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
                             '//www.tinymce.com/css/codepen.min.css'
-                        ],
+                        ],                        
                         relative_urls: false,
+                        remove_script_host: false,
+                        document_base_url : url,
                         {% if external_filemanager_path is defined and external_plugins is defined  %}
                             external_filemanager_path: "{{ asset(external_filemanager_path) }}",
                             filemanager_title: "Responsive Filemanager",
